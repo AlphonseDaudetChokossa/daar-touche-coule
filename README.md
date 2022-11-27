@@ -5,7 +5,7 @@ in a decentralized way, on Ethereum. This will have cool side effects, like not
 be forced to pay for servers.
 The project can't be run on Windows. Please, use WSL.
 
-# Installation
+# Installation.
 
 ```bash
 # With HTTPS
