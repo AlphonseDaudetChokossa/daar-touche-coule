@@ -3,6 +3,13 @@ import styles from './styles.module.css'
 import * as ethereum from '@/lib/ethereum'
 import * as main from '@/lib/main'
 import { BigNumber } from 'ethers'
+<main></main>
+
+
+enum ShipModels {
+  BasicShip = 1,
+  SmartShip
+}
 
 type Canceler = () => void
 const useAffect = (
@@ -42,6 +49,7 @@ const useWindowSize = () => {
 const useWallet = () => {
   const [details, setDetails] = useState<ethereum.Details>()
   const [contract, setContract] = useState<main.Main>()
+  const [shipcontract, setShipContract] = useState<main.SmartShip>()
   useAffect(async () => {
     const details_ = await ethereum.connect('metamask')
     if (!details_) return
@@ -130,11 +138,28 @@ const useBoard = (wallet: ReturnType<typeof useWallet>) => {
 }
 
 const Buttons = ({ wallet }: { wallet: ReturnType<typeof useWallet> }) => {
-  const next = () => wallet?.contract.turn()
+  const subscribe = (shipModel : ShipModels) => {
+    switch(shipModel) { 
+      case ShipModels.BasicShip: { 
+          wallet?.contract.registerNewShip(1)
+         break; 
+      } 
+      case ShipModels.SmartShip: { 
+        wallet?.contract.registerNewShip(2)
+         break; 
+      } 
+      default: { 
+         break; 
+      } 
+   } 
+    
+  }
+  const play = () => wallet?.contract.turn()
   return (
     <div style={{ display: 'flex', gap: 5, padding: 5 }}>
-      <button onClick={() => {}}>Register</button>
-      <button onClick={next}>Turn</button>
+      <button onClick={() => {subscribe(ShipModels.BasicShip)}}>Register BasicShip</button>
+      <button onClick={() => {subscribe(ShipModels.SmartShip)}}>Register SmartShip</button>
+      <button onClick={play}>Turn</button>
     </div>
   )
 }
